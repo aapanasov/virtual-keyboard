@@ -15,6 +15,7 @@ const Keyboard = {
     lang: 'en',
   },
 
+  // TODO: init
   init() {
     // Create main elements
     this.elements.main = document.createElement('div');
@@ -25,11 +26,14 @@ const Keyboard = {
     this.elements.keysContainer.classList.add('keyboard__keys');
     this.elements.keysContainer.append(this.createKeys());
 
+    this.elements.key = this.elements.keysContainer.querySelectorAll('.keyboard__key');
+
     // Add to DOM
     this.elements.main.append(this.elements.keysContainer);
     document.body.append(this.elements.main);
   },
 
+  // TODO: create keys
   createKeys() {
     const fragment = document.createDocumentFragment();
     const keyLayout = [
@@ -181,6 +185,7 @@ const Keyboard = {
             this.triggerEvent('oninput');
           });
           break;
+
         default:
           keyElement.textContent = key.toLocaleLowerCase();
           keyElement.addEventListener('click', () => {
@@ -203,10 +208,19 @@ const Keyboard = {
 
   triggerEvent(handleName) {
     console.log(`Event Triggered! Event name: ${handleName}`);
+    this.eventHandlers.oninput(this.properties.value);
   },
 
   toggleCapsLock() {
-    console.log('CapsLock Triggered!');
+    this.properties.capsLock = !this.properties.capsLock;
+
+    this.elements.key.forEach((key) => {
+      if (key.textContent.length === 1) {
+        key.textContent = this.properties.capsLock
+          ? key.textContent.toUpperCase()
+          : key.textContent.toLowerCase();
+      }
+    });
   },
 };
 
