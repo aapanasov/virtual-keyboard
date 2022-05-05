@@ -1,5 +1,9 @@
 // TODO: Keyboard Class
 class Keyboard {
+  constructor(lang = 'en') {
+    this.lang = lang;
+  }
+
   elements = {
     main: null,
     keysContainer: null,
@@ -16,23 +20,40 @@ class Keyboard {
 
   shift = false;
 
-  lang = 'en';
-
   keyLayouts = {
-    en: [
-      '`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'backspace',
-      'tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', 'del',
-      'caps', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', 'enter',
-      'shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', '▲', 'shift-r',
-      'ctrl', 'win', 'alt', 'space', 'alt', '◄', '▼', '►', 'ctrl',
-    ],
-    enShift: [
-      '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', 'backspace',
-      'tab', 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '[', ']', 'del',
-      'caps', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ':', '"', 'enter',
-      'shift', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '<', '>', '?', '▲', 'shift-r',
-      'ctrl', 'win', 'alt', 'space', 'alt', '◄', '▼', '►', 'ctrl',
-    ],
+    en: {
+      normal: [
+        '`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'backspace',
+        'tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', 'del',
+        'caps', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', 'enter',
+        'shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', '▲', 'shift-r',
+        'ctrl', 'win', 'alt', 'space', 'alt', '◄', '▼', '►', 'ctrl',
+      ],
+
+      shifted: [
+        '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', 'backspace',
+        'tab', 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '[', ']', 'del',
+        'caps', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ':', '"', 'enter',
+        'shift', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '<', '>', '?', '▲', 'shift-r',
+        'ctrl', 'win', 'alt', 'space', 'alt', '◄', '▼', '►', 'ctrl',
+      ],
+    },
+    ru: {
+      normal: [
+        'ё', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'backspace',
+        'tab', 'й', 'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з', 'х', 'ъ', 'del',
+        'caps', 'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э', 'enter',
+        'shift', 'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', '.', '▲', 'shift-r',
+        'ctrl', 'win', 'alt', 'space', 'alt', '◄', '▼', '►', 'ctrl',
+      ],
+      shifted: [
+        'Ё', '!', '"', '№', ';', '%', ':', '?', '*', '(', ')', '_', '+', 'backspace',
+        'tab', 'Й', 'Й', 'У', 'К', 'Е', 'Н', 'Г', 'Ш', 'Щ', 'З', 'Х', 'Ъ', 'del',
+        'caps', 'Ф', 'Ы', 'В', 'А', 'П', 'Р', 'О', 'Л', 'Д', 'Ж', 'Э', 'enter',
+        'shift', 'Я', 'Ч', 'С', 'М', 'И', 'Т', 'Ь', 'Б', 'Ю', ',', '▲', 'shift-r',
+        'ctrl', 'win', 'alt', 'space', 'alt', '◄', '▼', '►', 'ctrl',
+      ],
+    },
   };
 
   // TODO: init
@@ -44,7 +65,7 @@ class Keyboard {
     // Setup main elements
     this.elements.main.classList.add('keyboard');
     this.elements.keysContainer.classList.add('keyboard__keys');
-    this.elements.keysContainer.append(this.createKeys(this.keyLayouts.en));
+    this.elements.keysContainer.append(this.createKeys(this.keyLayouts[this.lang].normal));
 
     this.elements.key = this.elements.keysContainer.querySelectorAll('.keyboard__key');
 
@@ -141,28 +162,28 @@ class Keyboard {
           });
           break;
 
-        case 'left':
+        case '◄':
           keyElement.classList.add('keyboard__key', 'keyboard__key--dark');
           keyElement.innerText = '◄';
 
           keyElement.addEventListener('click', () => { });
           break;
 
-        case 'up':
+        case '▲':
           keyElement.classList.add('keyboard__key', 'keyboard__key--dark');
           keyElement.innerText = '▲';
 
           keyElement.addEventListener('click', () => { });
           break;
 
-        case 'right':
+        case '►':
           keyElement.classList.add('keyboard__key', 'keyboard__key--dark');
           keyElement.innerText = '►';
 
           keyElement.addEventListener('click', () => { });
           break;
 
-        case 'down':
+        case '▼':
           keyElement.classList.add('keyboard__key', 'keyboard__key--dark');
           keyElement.innerText = '▼';
 
@@ -241,17 +262,18 @@ class Keyboard {
   // TODO: toggle Shift
   toggleShift() {
     this.shift = !this.shift;
+
     for (let i = 0; i < this.elements.key.length; i += 1) {
       if (this.shift) {
         if (this.elements.key[i].innerText.length === 1) {
           this.elements.key[i].innerText = this.capsLock
-            ? this.keyLayouts.enShift[i].toLowerCase()
-            : this.keyLayouts.enShift[i].toUpperCase();
+            ? this.keyLayouts[this.lang].shifted[i].toLowerCase()
+            : this.keyLayouts[this.lang].shifted[i].toUpperCase();
         }
       } else if (this.elements.key[i].innerText.length === 1) {
         this.elements.key[i].innerText = this.capsLock
-          ? this.keyLayouts.en[i].toUpperCase()
-          : this.keyLayouts.en[i].toLowerCase();
+          ? this.keyLayouts[this.lang].normal[i].toUpperCase()
+          : this.keyLayouts[this.lang].normal[i].toLowerCase();
       }
     }
   }
@@ -262,7 +284,7 @@ const textarea = document.createElement('textarea');
 textarea.setAttribute('id', textarea);
 document.body.append(textarea);
 
-const keyboard = new Keyboard();
+const keyboard = new Keyboard('ru');
 window.addEventListener('DOMContentLoaded', () => {
   keyboard.init();
 });
