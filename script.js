@@ -1,19 +1,19 @@
-const Keyboard = {
-  elements: {
+class Keyboard {
+  elements = {
     main: null,
     keysContainer: null,
     key: [],
-  },
+  };
 
-  eventHandlers: {
+  eventHandlers = {
     oninput: null,
-  },
+  };
 
-  properties: {
+  properties = {
     value: '',
     capsLock: false,
     lang: 'en',
-  },
+  };
 
   // TODO: init
   init() {
@@ -31,7 +31,7 @@ const Keyboard = {
     // Add to DOM
     this.elements.main.append(this.elements.keysContainer);
     document.body.append(this.elements.main);
-  },
+  }
 
   // TODO: create keys
   createKeys() {
@@ -204,12 +204,12 @@ const Keyboard = {
     });
 
     return fragment;
-  },
+  }
 
   triggerEvent(handleName) {
     console.log(`Event Triggered! Event name: ${handleName}`);
     this.eventHandlers.oninput(this.properties.value);
-  },
+  }
 
   toggleCapsLock() {
     this.properties.capsLock = !this.properties.capsLock;
@@ -221,9 +221,11 @@ const Keyboard = {
           : key.textContent.toLowerCase();
       }
     });
-  },
-};
+  }
+}
+
+const keyboard = new Keyboard();
 
 window.addEventListener('DOMContentLoaded', () => {
-  Keyboard.init();
+  keyboard.init();
 });
