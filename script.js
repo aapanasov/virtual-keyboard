@@ -1,7 +1,8 @@
 // TODO: Keyboard Class
 class Keyboard {
-  constructor(lang = 'en') {
+  constructor(output, lang = 'en') {
     this.lang = lang;
+    this.output = output;
   }
 
   elements = {
@@ -14,7 +15,7 @@ class Keyboard {
     oninput: null,
   };
 
-  value = '';
+  // value = '';
 
   capsLock = false;
 
@@ -86,13 +87,23 @@ class Keyboard {
       keyElement.classList.add('keyboard__key');
 
       switch (key) {
+        // TODO: backspace
         case 'backspace':
           keyElement.classList.add('keyboard__key--wide', 'keyboard__key--dark');
           keyElement.innerText = 'Backspace';
 
           keyElement.addEventListener('click', () => {
-            this.value = this.value.substring(0, this.value.length - 1);
-            this.triggerEvent('oninput');
+            const position = this.output.selectionStart;
+
+            this.output.value = this.output.value.substring(0, this.output.selectionStart - 1)
+            + this.output.value.substring(this.output.selectionStart);
+
+            this.output.setSelectionRange(
+              position - 1,
+              position - 1,
+            );
+
+            this.triggerEvent('backspace');
           });
           break;
 
@@ -101,9 +112,18 @@ class Keyboard {
           keyElement.innerText = 'Del';
 
           keyElement.addEventListener('click', () => {
-            this.value = this.value
-              .substring(0, this.value.length - 1);
-            this.triggerEvent('oninput');
+            const position = this.output.selectionStart;
+
+            if (position < this.output.value.length) {
+              this.output.value = this.output.value.substring(0, this.output.selectionStart)
+            + this.output.value.substring(this.output.selectionStart + 1);
+            }
+
+            this.output.setSelectionRange(
+              position,
+              position,
+            );
+            this.triggerEvent('del');
           });
           break;
 
@@ -148,46 +168,82 @@ class Keyboard {
           keyElement.classList.add('keyboard__key', 'keyboard__key--dark');
           keyElement.innerText = 'Win';
 
-          keyElement.addEventListener('click', () => {
-
-          });
+          keyElement.addEventListener('click', () => { });
           break;
 
         case 'alt':
           keyElement.classList.add('keyboard__key', 'keyboard__key--dark');
           keyElement.innerText = 'Alt';
 
-          keyElement.addEventListener('click', () => {
-
-          });
+          keyElement.addEventListener('click', () => { });
           break;
 
+        // TODO: arrows
         case '◄':
           keyElement.classList.add('keyboard__key', 'keyboard__key--dark');
           keyElement.innerText = '◄';
 
-          keyElement.addEventListener('click', () => { });
+          keyElement.addEventListener('click', () => {
+            this.output.setSelectionRange(
+              this.output.selectionStart - 1,
+              this.output.selectionStart - 1,
+            );
+            this.triggerEvent('left');
+          });
           break;
 
         case '▲':
           keyElement.classList.add('keyboard__key', 'keyboard__key--dark');
           keyElement.innerText = '▲';
 
-          keyElement.addEventListener('click', () => { });
+          keyElement.addEventListener('click', () => {
+            const position = this.output.selectionStart;
+            this.output.value = this.output.value.substring(0, this.output.selectionStart)
+            + key
+            + this.output.value.substring(this.output.selectionStart);
+
+            this.output.setSelectionRange(
+              position + 1,
+              position + 1,
+            );
+
+            this.triggerEvent('up');
+          });
+
           break;
 
         case '►':
           keyElement.classList.add('keyboard__key', 'keyboard__key--dark');
           keyElement.innerText = '►';
 
-          keyElement.addEventListener('click', () => { });
+          keyElement.addEventListener('click', () => {
+            this.output.setSelectionRange(
+              this.output.selectionStart + 1,
+              this.output.selectionStart + 1,
+            );
+
+            this.triggerEvent('right');
+          });
+
           break;
 
         case '▼':
           keyElement.classList.add('keyboard__key', 'keyboard__key--dark');
           keyElement.innerText = '▼';
 
-          keyElement.addEventListener('click', () => { });
+          keyElement.addEventListener('click', () => {
+            const position = this.output.selectionStart;
+            this.output.value = this.output.value.substring(0, this.output.selectionStart)
+            + key
+            + this.output.value.substring(this.output.selectionStart);
+
+            this.output.setSelectionRange(
+              position + 1,
+              position + 1,
+            );
+
+            this.triggerEvent('down');
+          });
           break;
 
         case 'enter':
@@ -195,9 +251,18 @@ class Keyboard {
           keyElement.innerText = 'Enter';
 
           keyElement.addEventListener('click', () => {
-            this.value += '\n';
-            this.triggerEvent('oninput');
+            const position = this.output.selectionStart;
+            this.output.value = `${this.output.value.substring(0, this.output.selectionStart)
+            }\n${this.output.value.substring(this.output.selectionStart)}`;
+
+            this.output.setSelectionRange(
+              position + 1,
+              position + 1,
+            );
+
+            this.triggerEvent('enter');
           });
+
           break;
 
         case 'space':
@@ -205,28 +270,53 @@ class Keyboard {
           keyElement.innerText = '';
 
           keyElement.addEventListener('click', () => {
-            this.value += ' ';
-            this.triggerEvent('oninput');
+            const position = this.output.selectionStart;
+            this.output.value = `${this.output.value.substring(0, this.output.selectionStart)
+            } ${this.output.value.substring(this.output.selectionStart)}`;
+
+            this.output.setSelectionRange(
+              position + 1,
+              position + 1,
+            );
+
+            this.triggerEvent('space');
           });
           break;
+
         case 'tab':
           keyElement.classList.add('keyboard__key--wide', 'keyboard__key--dark');
           keyElement.innerText = 'Tab';
 
           keyElement.addEventListener('click', () => {
-            this.value += '\t';
-            this.triggerEvent('oninput');
+            const position = this.output.selectionStart;
+            this.output.value = `${this.output.value.substring(0, this.output.selectionStart)
+            }\t${this.output.value.substring(this.output.selectionStart)}`;
+
+            this.output.setSelectionRange(
+              position + 1,
+              position + 1,
+            );
+
+            this.triggerEvent('tab');
           });
           break;
 
+          // TODO: default key pressed
         default:
           keyElement.textContent = key;
-          keyElement.addEventListener('click', () => {
-            this.value += this.capsLock
-              ? key.toUpperCase()
-              : key.toLocaleLowerCase();
 
-            this.triggerEvent('oninput');
+          keyElement.addEventListener('click', () => {
+            const position = this.output.selectionStart;
+            this.output.value = this.output.value.substring(0, this.output.selectionStart)
+            + (this.capsLock ? key.toUpperCase() : key)
+            + this.output.value.substring(this.output.selectionStart);
+
+            this.output.setSelectionRange(
+              position + 1,
+              position + 1,
+            );
+
+            this.triggerEvent(key);
           });
           break;
       }
@@ -241,9 +331,10 @@ class Keyboard {
   }
 
   // TODO: triggerEvent
-  triggerEvent(handleName) {
-    console.log(`Event Triggered! Event name: ${handleName}`);
-    this.eventHandlers.oninput(this.value);
+  triggerEvent(event) {
+    this.output.focus();
+    // this.output.value = this.value;
+    console.log(event);
   }
 
   // TODO: toggle Caps
@@ -281,10 +372,10 @@ class Keyboard {
 
 // TODO: textarea
 const textarea = document.createElement('textarea');
-textarea.setAttribute('id', textarea);
+textarea.setAttribute('id', 'textarea');
 document.body.append(textarea);
 
-const keyboard = new Keyboard('ru');
+const keyboard = new Keyboard(textarea);
 window.addEventListener('DOMContentLoaded', () => {
   keyboard.init();
 });
