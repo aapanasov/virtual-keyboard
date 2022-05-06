@@ -389,14 +389,15 @@ class Keyboard {
   // TODO: toggle Caps
   toggleCapsLock() {
     this.capsLock = !this.capsLock;
+    const keys = this.elements.key;
 
-    this.elements.key.forEach((key) => {
-      if (key.textContent.length === 1) {
-        key.textContent = this.capsLock
-          ? key.textContent.toUpperCase()
-          : key.textContent.toLowerCase();
+    for (let i = 0; i < keys.length; i += 1) {
+      if (keys[i].textContent.length === 1) {
+        keys[i].textContent = this.capsLock
+          ? keys[i].textContent.toUpperCase()
+          : keys[i].textContent.toLowerCase();
       }
-    });
+    }
   }
 
   // TODO: toggle Shift
@@ -421,7 +422,6 @@ class Keyboard {
   // TODO: change lang
   changeLang() {
     this.lang = this.lang === 'ru' ? 'en' : 'ru';
-    console.log(this.lang);
     localStorage.setItem('lang', this.lang);
   }
 
@@ -432,7 +432,6 @@ class Keyboard {
     if ((event.type === 'keydown' && event.code === 'ControlLeft')
     || (event.type === 'keydown' && event.code === 'ShiftLeft')) {
       this.pressed.add(event.code);
-      console.log(this.pressed);
       if (this.pressed.size === 2) { this.changeLang(); }
     } else (this.pressed.clear());
 
