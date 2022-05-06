@@ -382,15 +382,12 @@ class Keyboard {
   }
 
   // TODO: triggerEvent
-  triggerEvent(event) {
+  triggerEvent() {
     this.output.focus();
-    // this.output.value = this.value;
-    // console.log(event);
   }
 
   // TODO: toggle Caps
   toggleCapsLock() {
-    console.log('toggle Caps');
     this.capsLock = !this.capsLock;
 
     this.elements.key.forEach((key) => {
@@ -480,7 +477,7 @@ document.body.append(textarea);
 
 // TODO: main
 
-const lang = localStorage.getItem('lang');
+const lang = localStorage.getItem('lang') || 'en';
 const keyboard = new Keyboard(textarea, lang);
 window.addEventListener('DOMContentLoaded', () => {
   keyboard.init();
