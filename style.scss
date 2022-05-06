@@ -1,4 +1,4 @@
-textarea {
+#textarea {
     display: block;
     width: 876px;
     height: 420px;
@@ -58,6 +58,13 @@ textarea {
         border-radius: 12px;
         box-shadow: none;
     }
+
+    &.active {
+        background-color: #B4E197;
+        border-radius: 12px;
+        box-shadow: none;
+    }
+
 }
 
 .keyboard__key--wide {
