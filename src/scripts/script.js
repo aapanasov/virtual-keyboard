@@ -3,7 +3,7 @@ import Keyboard from './keyboard.js';
 // TODO: hint
 const hint = document.createElement('div');
 hint.classList.add('hint');
-hint.innerText = 'Клавиатура создана в операционной системе Windows\nДля переключения языка комбинация: левыe ctrl + shift';
+hint.innerText = 'Клавиатура создана в операционной системе Windows\nДля переключения языка комбинация: левыe ctrl + alt';
 document.body.append(hint);
 
 // TODO: textarea
@@ -14,6 +14,7 @@ document.body.append(textarea);
 // TODO: keyboard
 
 const lang = localStorage.getItem('lang') || 'en';
+localStorage.setItem('lang', lang);
 const keyboard = new Keyboard(textarea, lang);
 window.addEventListener('DOMContentLoaded', () => {
   keyboard.init();
@@ -21,7 +22,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 // TODO: key hook
 const keysHandler = (event) => {
-  keyboard.handleKeyboardEvents(event);
+  keyboard.eventHandle(event);
 };
 window.addEventListener('keydown', keysHandler);
 window.addEventListener('keyup', keysHandler);
