@@ -10,6 +10,6 @@ module.exports = {
     ecmaVersion: 13,
   },
   rules: {
-    'import/extensions': 'never',
+    'import/extensions': [0],
   },
 };
