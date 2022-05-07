@@ -105,4 +105,11 @@
 .keyboard__key--dark {
   background-color: rgba(25, 26, 25, 0.8);
 }
+
+.hint {
+  margin: 10px auto;
+  text-align: center;
+  font-family: monospace;
+  font-size: large;
+}
 /*# sourceMappingURL=style.css.map */
