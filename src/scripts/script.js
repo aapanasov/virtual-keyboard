@@ -15,6 +15,7 @@ document.body.append(textarea);
 
 const lang = localStorage.getItem('lang') || 'en';
 localStorage.setItem('lang', lang);
+localStorage.setItem('capslock', false);
 const keyboard = new Keyboard(textarea, lang);
 window.addEventListener('DOMContentLoaded', () => {
   keyboard.init();

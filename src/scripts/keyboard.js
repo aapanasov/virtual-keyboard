@@ -70,11 +70,10 @@ export default class Keyboard {
             'keyboard__key--wide',
             'keyboard__key--activatable',
             'keyboard__key--dark',
+            this.capsLock ? 'keyboard__key--active' : 'nocaps',
           );
           keyElement.innerText = 'Caps';
           keyElement.setAttribute('keyCode', 'CapsLock');
-          // FIXME: stay caps on lang change
-          this.capsLock = false;
 
           keyElement.addEventListener('click', () => {
             this.eventHandle('capslock');
@@ -194,9 +193,9 @@ export default class Keyboard {
           keyElement.addEventListener('click', () => this.eventHandle('tab'));
           break;
 
-          // TODO: default key pressed
+          // TODO: create default key
         default:
-          keyElement.textContent = key;
+          keyElement.textContent = this.capsLock ? key.toUpperCase() : key.toLowerCase();
           if (key === '0' || key === '1'
               || key === '2' || key === '3'
               || key === '4' || key === '5'
@@ -261,6 +260,7 @@ export default class Keyboard {
 
     capslock: () => {
       this.capsLock = !this.capsLock;
+      localStorage.setItem('capslock', this.capsLock);
       const { keys } = this.elements;
 
       for (let i = 0; i < keys.length; i += 1) {
@@ -387,6 +387,7 @@ export default class Keyboard {
       this.elements.main.remove();
       this.lang = this.lang === 'ru' ? 'en' : 'ru';
       localStorage.setItem('lang', this.lang);
+      localStorage.setItem('capslock', this.capsLock);
       this.init();
     },
 
