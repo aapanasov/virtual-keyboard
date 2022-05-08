@@ -426,7 +426,13 @@ export default class Keyboard {
       }
     } else {
       // TODO: HW-keyboard events
-      const KEY = document.getElementById(event.code);
+      let KEY;
+      if (document.getElementById(event.code)) {
+        KEY = document.getElementById(event.code);
+      } else {
+        KEY = document.createElement('div');
+        KEY.id = event.code;
+      }
 
       switch (KEY.id) {
         // TODO: on Tab
@@ -591,6 +597,17 @@ export default class Keyboard {
           if (event.type === 'keyup') {
             KEY.classList.remove('active');
           }
+          break;
+
+        case 'Backslash':
+          if (event.type === 'keydown') {
+            KEY.classList.add('active');
+          }
+          if (event.type === 'keyup') {
+            KEY.classList.remove('active');
+          }
+          break;
+        case 'F12':
           break;
 
         // TODO: on Default
