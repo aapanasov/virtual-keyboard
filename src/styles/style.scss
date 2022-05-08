@@ -47,7 +47,7 @@
     align-items: center;
     justify-content: center;
     vertical-align: top;
-    transition: 0.3s;
+    transition: 0.2s;
 
     &:hover {
         background-color: #83BD75;
@@ -55,13 +55,13 @@
 
     &:active {
         background-color: #B4E197;
-        border-radius: 12px;
+        border-radius: 25px;
         box-shadow: none;
     }
 
     &.active {
         background-color: #B4E197;
-        border-radius: 12px;
+        border-radius: 25px;
         box-shadow: none;
     }
 

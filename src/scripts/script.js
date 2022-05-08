@@ -8,7 +8,7 @@ document.body.append(hint);
 
 // TODO: textarea
 const textarea = document.createElement('textarea');
-textarea.setAttribute('id', 'textarea');
+textarea.id = 'textarea';
 document.body.append(textarea);
 
 // TODO: keyboard

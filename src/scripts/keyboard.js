@@ -380,8 +380,6 @@ export default class Keyboard {
           } else character = this.keyLayouts[this.lang].shifted[index].toLowerCase();
         }
 
-        // console.log(key, character);
-
         this.output.value = this.output.value.substring(0, this.output.selectionStart)
         + character
         + this.output.value.substring(this.output.selectionStart);
