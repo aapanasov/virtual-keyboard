@@ -359,9 +359,21 @@ export default class Keyboard {
 
     default: (key) => {
       const position = this.output.selectionStart;
-      this.output.value = this.output.value.substring(0, this.output.selectionStart)
-         + (this.capsLock ? key.toUpperCase() : key.toLowerCase())
+      let character = key;
 
+      if (this.capsLock && !this.shift) {
+        character = character.toUpperCase();
+      }
+
+      if (this.shift) {
+        const index = this.keyLayouts[this.lang].normal.indexOf(key);
+        if (!this.capsLock) {
+          character = this.keyLayouts[this.lang].shifted[index];
+        } else character = this.keyLayouts[this.lang].shifted[index].toLowerCase();
+      }
+
+      this.output.value = this.output.value.substring(0, this.output.selectionStart)
+        + character
         + this.output.value.substring(this.output.selectionStart);
 
       this.output.setSelectionRange(
