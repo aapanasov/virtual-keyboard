@@ -361,10 +361,8 @@ export default class Keyboard {
         const position = this.output.selectionStart;
 
         const index = Math.max(
-          this.keyLayouts.en.normal.indexOf(key),
-          this.keyLayouts.en.shifted.indexOf(key),
-          this.keyLayouts.ru.normal.indexOf(key),
-          this.keyLayouts.ru.shifted.indexOf(key),
+          this.keyLayouts[this.lang].normal.indexOf(key),
+          this.keyLayouts[this.lang].shifted.indexOf(key),
         );
 
         let character = this.keyLayouts[this.lang].normal[index];
@@ -502,6 +500,7 @@ export default class Keyboard {
           }
 
           break;
+
         case 'Comma':
           if (event.type === 'keydown') {
             KEY.classList.add('active');
@@ -512,6 +511,7 @@ export default class Keyboard {
             KEY.classList.remove('active');
           }
           break;
+
         case 'Period':
           if (event.type === 'keydown') {
             KEY.classList.add('active');
