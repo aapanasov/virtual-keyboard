@@ -14,7 +14,7 @@
 }
 
 .keyboard {
-  width: 876px;
+  width: 878px;
   height: 300px;
   margin: 0 auto;
   background-color: #888888;
@@ -79,8 +79,12 @@
           box-shadow: none;
 }
 
+.keyboard__key:focus {
+  outline: none;
+}
+
 .keyboard__key--wide {
-  width: 100px;
+  width: 108px;
 }
 
 .keyboard__key--extra-wide {
