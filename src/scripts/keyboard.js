@@ -197,8 +197,8 @@ export default class Keyboard {
           if (key === '`' || key === 'ё') { keyElement.id = 'Backquote'; } else
           if (key === '-') { keyElement.id = 'Minus'; } else
           if (key === '=') { keyElement.id = 'Equal'; } else
-          if (key === '[') { keyElement.id = 'BracketLeft'; } else
-          if (key === ']') { keyElement.id = 'BracketRight'; } else
+          if (key === '[' || key === 'х') { keyElement.id = 'BracketLeft'; } else
+          if (key === ']' || key === 'ъ') { keyElement.id = 'BracketRight'; } else
           if (key === ';' || key === 'ж') { keyElement.id = 'Semicolon'; } else
           if (key === "'" || key === 'э') { keyElement.id = 'Quote'; } else
           if (key === ',') { keyElement.id = 'Comma'; } else
