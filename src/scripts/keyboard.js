@@ -356,37 +356,35 @@ export default class Keyboard {
       );
     },
 
-    default: (key) => {
-      if (key.length === 1) {
-        const position = this.output.selectionStart;
+    virtualDefault: (key) => {
+      let char = key;
+      const index = this.keyLayouts[this.lang].normal.indexOf(key);
 
-        const index = Math.max(
-          this.keyLayouts[this.lang].normal.indexOf(key),
-          this.keyLayouts[this.lang].shifted.indexOf(key),
-        );
+      if (this.shift && !this.capsLock) {
+        char = this.keyLayouts[this.lang].shifted[index];
+      }
+      if (!this.shift && this.capsLock) {
+        char = key.toUpperCase();
+      }
+      if (this.shift && this.capsLock) {
+        char = this.keyLayouts[this.lang].shifted[index].toLowerCase();
+      }
 
-        let character = this.keyLayouts[this.lang].normal[index];
+      const position = this.output.selectionStart;
 
-        if ((this.capsLock && !this.shift)
-        || (!this.capsLock && this.shift)) {
-          character = character.toUpperCase();
-        } else character = character.toLowerCase();
-
-        if (this.shift) {
-          if (!this.capsLock) {
-            character = this.keyLayouts[this.lang].shifted[index];
-          } else character = this.keyLayouts[this.lang].shifted[index].toLowerCase();
-        }
-
-        this.output.value = this.output.value.substring(0, this.output.selectionStart)
-        + character
+      this.output.value = this.output.value.substring(0, this.output.selectionStart)
+      + char
         + this.output.value.substring(this.output.selectionStart);
 
-        this.output.setSelectionRange(
-          position + 1,
-          position + 1,
-        );
-      }
+      this.output.setSelectionRange(
+        position + 1,
+        position + 1,
+      );
+    },
+
+    // TODO: hwDefault handle
+    hardwareDefault: () => {
+
     },
 
     // TODO: change lang
@@ -400,236 +398,229 @@ export default class Keyboard {
 
   };
 
-  // TODO: eventHandle
+  // TODO: Virtual-Keyboard eventHandle
   eventHandle(event) {
     this.output.focus();
-    // console.log(event.code);
+    if (event === 'backspace') { this.handles.backspace(); } else
+    if (event === 'delete') { this.handles.delete(); } else
+    if (event === 'capslock') { this.handles.capslock(); } else
+    if (event === 'shift') { this.handles.shift(); } else
+    if (event === 'arrowLeft') { this.handles.arrowLeft(); } else
+    if (event === 'arrowUp') { this.handles.arrowUp(); } else
+    if (event === 'arrowRight') { this.handles.arrowRight(); } else
+    if (event === 'arrowDown') { this.handles.arrowDown(); } else
+    if (event === 'enter') { this.handles.enter(); } else
+    if (event === 'space') { this.handles.space(); } else
+    if (event === 'tab') { this.handles.tab(); } else {
+      this.handles.virtualDefault(event);
+    }
+  }
 
-    // TODO: V-keyboard events
-    if (typeof event === 'string') {
-      if (event === 'backspace') { this.handles.backspace(); } else
-      if (event === 'delete') { this.handles.delete(); } else
-      if (event === 'capslock') { this.handles.capslock(); } else
-      if (event === 'shift') { this.handles.shift(); } else
-      if (event === 'arrowLeft') { this.handles.arrowLeft(); } else
-      if (event === 'arrowUp') { this.handles.arrowUp(); } else
-      if (event === 'arrowRight') { this.handles.arrowRight(); } else
-      if (event === 'arrowDown') { this.handles.arrowDown(); } else
-      if (event === 'enter') { this.handles.enter(); } else
-      if (event === 'space') { this.handles.space(); } else
-      if (event === 'tab') { this.handles.tab(); } else {
-        this.handles.default(event);
-      }
+  // TODO: HW-keyboard event handle
+  hwEventHandle(event) {
+    let KEY;
+    if (document.getElementById(event.code)) {
+      KEY = document.getElementById(event.code);
     } else {
-      // TODO: HW-keyboard events
-      let KEY;
-      if (document.getElementById(event.code)) {
-        KEY = document.getElementById(event.code);
-      } else {
-        KEY = document.createElement('div');
-        KEY.id = event.code;
-      }
+      KEY = document.createElement('div');
+      KEY.id = event.code;
+    }
 
-      switch (KEY.id) {
-        // TODO: on Tab
-        case 'Tab':
-          KEY.classList.add('active');
-          event.preventDefault();
-          if (event.type === 'keyup') {
-            KEY.classList.remove('active');
-            this.handles.tab();
-          }
-          break;
+    switch (KEY.id) {
+      // TODO: on Tab
+      case 'Tab':
+        KEY.classList.add('active');
+        event.preventDefault();
+        if (event.type === 'keyup') {
+          KEY.classList.remove('active');
+          this.handles.tab();
+        }
+        break;
 
         // TODO: on CapsLock
-        case 'CapsLock':
-          KEY.classList.add('active');
-          if (event.type === 'keyup') {
-            KEY.classList.remove('active');
-            KEY.classList.toggle('keyboard__key--active');
-            this.handles.capslock();
-          }
-          break;
+      case 'CapsLock':
+        KEY.classList.add('active');
+        if (event.type === 'keyup') {
+          KEY.classList.remove('active');
+          KEY.classList.toggle('keyboard__key--active');
+          this.handles.capslock();
+        }
+        break;
 
         // TODO: on ShiftLeft
-        case 'ShiftLeft':
-          if (!this.shift) {
-            KEY.classList.add('active');
-            this.handles.shift();
-          } else if (event.type === 'keyup') {
-            this.handles.shift();
-            KEY.classList.remove('active');
-          }
-          break;
+      case 'ShiftLeft':
+        if (!this.shift) {
+          KEY.classList.add('active');
+          this.handles.shift();
+        } else if (event.type === 'keyup') {
+          this.handles.shift();
+          KEY.classList.remove('active');
+        }
+        break;
 
         // TODO: on ShiftRight
-        case 'ShiftRight':
-          if (!this.shift) {
-            KEY.classList.add('active');
-            this.handles.shift();
-          } else if (event.type === 'keyup') {
-            this.handles.shift();
-            KEY.classList.remove('active');
-          }
-          break;
+      case 'ShiftRight':
+        if (!this.shift) {
+          KEY.classList.add('active');
+          this.handles.shift();
+        } else if (event.type === 'keyup') {
+          this.handles.shift();
+          KEY.classList.remove('active');
+        }
+        break;
 
         // TODO: on AltLeft
-        case 'AltLeft':
-          KEY.classList.add('active');
-          event.preventDefault();
-          if (event.type === 'keyup') {
-            KEY.classList.remove('active');
-          }
-          break;
+      case 'AltLeft':
+        KEY.classList.add('active');
+        event.preventDefault();
+        if (event.type === 'keyup') {
+          KEY.classList.remove('active');
+        }
+        break;
 
         // TODO: on AltRight
-        case 'AltRight':
+      case 'AltRight':
+        KEY.classList.add('active');
+        event.preventDefault();
+        if (event.type === 'keyup') {
+          KEY.classList.remove('active');
+        }
+        break;
+
+      case 'MetaLeft':
+        event.preventDefault();
+        KEY.classList.add('active');
+        setTimeout(() => { KEY.classList.remove('active'); }, 1000);
+        if (event.type === 'keyup') {
+          KEY.classList.remove('active');
+        }
+
+        break;
+
+      case 'ArrowLeft':
+        if (event.type === 'keydown') {
+          KEY.classList.add('active');
+        }
+        if (event.type === 'keyup') {
+          KEY.classList.remove('active');
+        }
+        break;
+
+      case 'ArrowRight':
+        if (event.type === 'keydown') {
+          KEY.classList.add('active');
+        }
+        if (event.type === 'keyup') {
+          KEY.classList.remove('active');
+        }
+        break;
+
+      case 'ArrowUp':
+        if (event.type === 'keydown') {
+          KEY.classList.add('active');
+        }
+        if (event.type === 'keyup') {
+          KEY.classList.remove('active');
+        }
+        break;
+
+      case 'ArrowDown':
+        if (event.type === 'keydown') {
+          KEY.classList.add('active');
+        }
+        if (event.type === 'keyup') {
+          KEY.classList.remove('active');
+        }
+        break;
+
+      case 'Backspace':
+        if (event.type === 'keydown') {
           KEY.classList.add('active');
           event.preventDefault();
-          if (event.type === 'keyup') {
-            KEY.classList.remove('active');
-          }
-          break;
+          this.handles.backspace();
+        }
+        if (event.type === 'keyup') {
+          KEY.classList.remove('active');
+        }
+        break;
 
-        // TODO: on Meta
-        case 'MetaLeft':
-          event.preventDefault();
+      case 'Enter':
+        if (event.type === 'keydown') {
           KEY.classList.add('active');
-          if (event.type === 'keyup') {
-            KEY.classList.remove('active');
-          }
+        }
+        if (event.type === 'keyup') {
+          KEY.classList.remove('active');
+        }
+        break;
 
-          break;
+      case 'Delete':
+        if (event.type === 'keydown') {
+          KEY.classList.add('active');
+        }
+        if (event.type === 'keyup') {
+          KEY.classList.remove('active');
+        }
+        break;
 
-        case 'Comma':
-          if (event.type === 'keydown') {
-            KEY.classList.add('active');
-            event.preventDefault();
-            this.handles.default('б');
-          }
-          if (event.type === 'keyup') {
-            KEY.classList.remove('active');
-          }
-          break;
+      case 'Space':
+        if (event.type === 'keydown') {
+          KEY.classList.add('active');
+        }
+        if (event.type === 'keyup') {
+          KEY.classList.remove('active');
+        }
+        break;
 
-        case 'Period':
-          if (event.type === 'keydown') {
-            KEY.classList.add('active');
-            event.preventDefault();
-            this.handles.default('ю');
-          }
-          if (event.type === 'keyup') {
-            KEY.classList.remove('active');
-          }
-          break;
+      case 'Backslash':
+        if (event.type === 'keydown') {
+          KEY.classList.add('active');
+        }
+        if (event.type === 'keyup') {
+          KEY.classList.remove('active');
+        }
+        break;
 
-        case 'ArrowLeft':
-          if (event.type === 'keydown') {
-            KEY.classList.add('active');
-          }
-          if (event.type === 'keyup') {
-            KEY.classList.remove('active');
-          }
-          break;
+      case 'ControlLeft':
+        if (event.type === 'keydown') {
+          KEY.classList.add('active');
+        }
+        if (event.type === 'keyup') {
+          KEY.classList.remove('active');
+        }
+        break;
+      case 'ControlRight':
+        if (event.type === 'keydown') {
+          KEY.classList.add('active');
+        }
+        if (event.type === 'keyup') {
+          KEY.classList.remove('active');
+        }
+        break;
 
-        case 'ArrowRight':
-          if (event.type === 'keydown') {
-            KEY.classList.add('active');
-          }
-          if (event.type === 'keyup') {
-            KEY.classList.remove('active');
-          }
-          break;
-
-        case 'ArrowUp':
-          if (event.type === 'keydown') {
-            KEY.classList.add('active');
-          }
-          if (event.type === 'keyup') {
-            KEY.classList.remove('active');
-          }
-          break;
-
-        case 'ArrowDown':
-          if (event.type === 'keydown') {
-            KEY.classList.add('active');
-          }
-          if (event.type === 'keyup') {
-            KEY.classList.remove('active');
-          }
-          break;
-
-        case 'Backspace':
-          if (event.type === 'keydown') {
-            KEY.classList.add('active');
-            event.preventDefault();
-            this.handles.backspace();
-          }
-          if (event.type === 'keyup') {
-            KEY.classList.remove('active');
-          }
-          break;
-
-        case 'Enter':
-          if (event.type === 'keydown') {
-            KEY.classList.add('active');
-          }
-          if (event.type === 'keyup') {
-            KEY.classList.remove('active');
-          }
-          break;
-
-        case 'Delete':
-          if (event.type === 'keydown') {
-            KEY.classList.add('active');
-          }
-          if (event.type === 'keyup') {
-            KEY.classList.remove('active');
-          }
-          break;
-
-        case 'Space':
-          if (event.type === 'keydown') {
-            KEY.classList.add('active');
-          }
-          if (event.type === 'keyup') {
-            KEY.classList.remove('active');
-          }
-          break;
-
-        case 'Backslash':
-          if (event.type === 'keydown') {
-            KEY.classList.add('active');
-          }
-          if (event.type === 'keyup') {
-            KEY.classList.remove('active');
-          }
-          break;
-        case 'F12':
-          break;
+      case 'F12':
+        break;
 
         // TODO: on Default
-        default:
-          if (event.type === 'keydown') {
-            KEY.classList.add('active');
-            event.preventDefault();
-            this.handles.default(event.key);
-          } else if (event.type === 'keyup') {
-            KEY.classList.remove('active');
-          }
-          break;
-      }
-
-      // TODO: on Change lang
-      if ((event.type === 'keyup' && event.code === 'ControlLeft')
-      || (event.type === 'keyup' && event.code === 'AltLeft')) {
-        this.pressed.add(event.code);
-        if (this.pressed.size === 2) {
-          this.handles.changeLang();
+      default:
+        if (event.type === 'keydown') {
+          KEY.classList.add('active');
+          // event.preventDefault();
+          this.handles.hardwareDefault(event);
+        } else if (event.type === 'keyup') {
+          KEY.classList.remove('active');
         }
-      } else {
-        this.pressed.clear();
+        break;
+    }
+
+    // TODO: on Change lang
+    if ((event.type === 'keydown' && event.code === 'ShiftLeft')
+    || (event.type === 'keydown' && event.code === 'AltLeft')) {
+      this.pressed.add(event.code);
+      if (this.pressed.size === 2) {
+        this.handles.changeLang();
       }
+    } else {
+      this.pressed.clear();
     }
   }
 }
