@@ -178,7 +178,9 @@ export default class Keyboard {
           break;
 
         case 'tab':
-          keyElement.classList.add('keyboard__key--wide', 'keyboard__key--dark');
+          keyElement.classList.add(
+            'keyboard__key--dark',
+          );
           keyElement.innerText = 'Tab';
           keyElement.id = 'Tab';
           keyElement.addEventListener('click', () => this.eventHandle('tab'));
@@ -194,6 +196,7 @@ export default class Keyboard {
               || key === '8' || key === '9') {
             keyElement.id = `Digit${key}`;
           } else
+          if (key === '\\') { keyElement.id = 'Backslash'; } else
           if (key === '`' || key === 'ё') { keyElement.id = 'Backquote'; } else
           if (key === '-') { keyElement.id = 'Minus'; } else
           if (key === '=') { keyElement.id = 'Equal'; } else
@@ -584,7 +587,9 @@ export default class Keyboard {
 
       case 'Backslash':
         if (event.type === 'keydown') {
+          event.preventDefault();
           KEY.classList.add('active');
+          this.handles.hardwareDefault(event);
         }
         if (event.type === 'keyup') {
           KEY.classList.remove('active');
