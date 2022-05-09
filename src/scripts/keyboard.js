@@ -491,6 +491,7 @@ export default class Keyboard {
         // TODO: on AltRight
       case 'AltRight':
         KEY.classList.add('active');
+        document.getElementById('ControlLeft').classList.remove('active');
         event.preventDefault();
         if (event.type === 'keyup') {
           KEY.classList.remove('active');
