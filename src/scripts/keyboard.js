@@ -383,8 +383,18 @@ export default class Keyboard {
     },
 
     // TODO: hwDefault handle
-    hardwareDefault: () => {
+    hardwareDefault: (event) => {
+      const char = document.getElementById(event.code).textContent;
 
+      const position = this.output.selectionStart;
+      this.output.value = this.output.value.substring(0, this.output.selectionStart)
+        + char
+        + this.output.value.substring(this.output.selectionStart);
+
+      this.output.setSelectionRange(
+        position + 1,
+        position + 1,
+      );
     },
 
     // TODO: change lang
@@ -604,7 +614,7 @@ export default class Keyboard {
       default:
         if (event.type === 'keydown') {
           KEY.classList.add('active');
-          // event.preventDefault();
+          event.preventDefault();
           this.handles.hardwareDefault(event);
         } else if (event.type === 'keyup') {
           KEY.classList.remove('active');
@@ -613,7 +623,7 @@ export default class Keyboard {
     }
 
     // TODO: on Change lang
-    if ((event.type === 'keydown' && event.code === 'ShiftLeft')
+    if ((event.type === 'keydown' && event.code === 'ControlLeft')
     || (event.type === 'keydown' && event.code === 'AltLeft')) {
       this.pressed.add(event.code);
       if (this.pressed.size === 2) {

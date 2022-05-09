@@ -3,7 +3,7 @@ import Keyboard from './keyboard.js';
 // TODO: hint
 const hint = document.createElement('div');
 hint.classList.add('hint');
-hint.innerText = 'Клавиатура создана в операционной системе Windows\nДля переключения языка комбинация: левыe shift + alt';
+hint.innerText = 'Клавиатура создана в операционной системе Windows\nДля переключения языка комбинация: левыe Control + Alt';
 document.body.append(hint);
 
 // TODO: textarea
