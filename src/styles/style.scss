@@ -65,6 +65,10 @@
         box-shadow: none;
     }
 
+    &:focus {
+        outline: none;
+    }
+
 }
 
 .keyboard__key--wide {
