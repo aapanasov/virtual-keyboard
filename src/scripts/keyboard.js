@@ -387,7 +387,9 @@ export default class Keyboard {
 
     // TODO: hwDefault handle
     hardwareDefault: (event) => {
-      const char = document.getElementById(event.code).textContent;
+      const char = document.getElementById(event.code)
+        ? document.getElementById(event.code).textContent
+        : '';
 
       const position = this.output.selectionStart;
       this.output.value = this.output.value.substring(0, this.output.selectionStart)
